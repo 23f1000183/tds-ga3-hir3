@@ -287,6 +287,7 @@ def response_task(task):
     return JSONResponse({"task": task}, media_type=A2A_MT)
 
 
+@app.post("/a2a/message:send")
 @app.post("/message:send")
 async def send_message(request: Request, authorization: Optional[str] = Header(default=None)):
     principal = principal_from_header(authorization)
@@ -499,6 +500,7 @@ async def send_message(request: Request, authorization: Optional[str] = Header(d
     raise HTTPException(status_code=400, detail={"code": "UNSUPPORTED_INPUT"})
 
 
+@app.get("/a2a/tasks/{task_id}")
 @app.get("/tasks/{task_id}")
 def read_task(task_id: str, authorization: Optional[str] = Header(default=None)):
     principal = principal_from_header(authorization)
@@ -506,6 +508,7 @@ def read_task(task_id: str, authorization: Optional[str] = Header(default=None))
     return JSONResponse(json.loads(row["task_json"]), media_type=A2A_MT)
 
 
+@app.get("/a2a/tasks")
 @app.get("/tasks")
 def list_tasks(authorization: Optional[str] = Header(default=None)):
     principal = principal_from_header(authorization)
@@ -517,6 +520,7 @@ def list_tasks(authorization: Optional[str] = Header(default=None)):
     return JSONResponse({"tasks": [json.loads(row["task_json"]) for row in rows]}, media_type=A2A_MT)
 
 
+@app.post("/a2a/tasks/{task_id}:cancel")
 @app.post("/tasks/{task_id}:cancel")
 def cancel_task(task_id: str, authorization: Optional[str] = Header(default=None)):
     principal = principal_from_header(authorization)
